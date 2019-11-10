@@ -3,6 +3,7 @@ package pl.ferdynand.calendar.controller;
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +21,24 @@ public class TestCalendarController {
     public ResponseEntity<String> getMonth( @RequestParam(name = "year", defaultValue = "2019") int year,
                                             @RequestParam(name = "month", defaultValue = "11") int month){
         String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
+        return new ResponseEntity<>(calendarURL, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/events")
+    public ResponseEntity<String> monthEvents(@RequestParam(name = "year", defaultValue = "2019") int year,@RequestParam(name = "month", defaultValue = "12") int month) {
+        String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
         Document document;
         try {
             document = Jsoup.connect(calendarURL).get();
         } catch (HttpStatusException ex ) {
             System.out.println("HttpStatusException message: " + ex);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (IOException ex) {
             System.out.println("IOException message: " + ex);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(calendarURL, HttpStatus.OK);
+
+        Elements activeDays = document.select("td.active");
+        return new ResponseEntity<>(activeDays.html(), HttpStatus.OK);
     }
 }
