@@ -52,7 +52,7 @@ public class CalendarEventsController {
         WeeiaEvents events = new WeeiaEvents(calendarURL);
         List weeiaEvents = getEventsList(events.getDaysOfEvents(), events.getDescriptionsOfEvents());
         if (weeiaEvents.isEmpty())
-            return new ResponseEntity<>("There is no events to generate", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
         filename += ".ics";
         Calendar iCal = new Calendar();
