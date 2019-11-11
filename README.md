@@ -106,7 +106,7 @@ Zwraca status:
   
 
 #### **Przykłady wywołania**
-
+* ##### Pierwszy przykład dla zapytania o aktywne wydarzenia w Grudniu 2019 roku.
 Request: 
 ```java
       GET | localhost:8080/api/weeia/calendar/events/file.ics?year=2019&month=12&filename=DecemberEvents 
@@ -167,6 +167,36 @@ Response:
     DTSTART;VALUE=DATE:20191219
     SUMMARY:Matura próbna Chemia rozszerzona
     UID:52035910-b9cc-4ee5-a63c-f72b0b8680a1
+    END:VEVENT
+    END:VCALENDAR
+    ```  
+</p></details>
+
+* ##### Drugi przyklad zapytania o aktywne wydarzenia w Kwietniu 2020 roku. W pliku zostało zawarte tylko jedno wydarzenie, ponieważ tyle było aktywnych wydarzeń w tym miesiącu.
+Request: 
+```java
+      GET | localhost:8080/api/weeia/calendar/events/file.ics?year=2020&month=04&filename=AprilEvents 
+```
+Response:
+```json
+    Events from year:	2020,
+    month:	04
+    created in file AprilEvents.ics
+```   
+<details>
+    <summary>Zawartość pliku AprilEvents.ics</summary>
+    <p>
+     
+    ``` 
+    BEGIN:VCALENDAR
+    PRODID:-//Apple Inc.//Mac OS X 10.15.1//EN
+    VERSION:2.0
+    CALSCALE:GREGORIAN
+    BEGIN:VEVENT
+    DTSTAMP:20191111T231638Z
+    DTSTART;VALUE=DATE:20200423
+    SUMMARY:gala rozdania nagród w konkursach
+    UID:47359b6c-e412-486e-82d8-3fd0625dcf84
     END:VEVENT
     END:VCALENDAR
     ```  
