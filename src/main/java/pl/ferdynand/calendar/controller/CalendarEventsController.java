@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/calendar")
-public class TestCalendarController {
+public class CalendarEventsController {
 
     @GetMapping
     public ResponseEntity<String> getURI( @RequestParam(name = "year", defaultValue = "2019") int year,
