@@ -27,6 +27,11 @@ public class TestCalendarController {
         return new ResponseEntity<>(calendarURL, HttpStatus.OK);
     }
 
+    /*
+    TODO Create ICS file
+    TODO Export ICS file to iPhone
+    TODO Import ICS file to calendar on iPhone
+     */
     @GetMapping(value = "/events/file.ics")
     public ResponseEntity<String> generateICS(@RequestParam(name = "year", defaultValue = "2019") int year, @RequestParam(name = "month", defaultValue = "12") String month) {
         if(year == 2019){
