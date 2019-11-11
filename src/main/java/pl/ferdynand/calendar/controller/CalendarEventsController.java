@@ -48,6 +48,8 @@ public class CalendarEventsController {
         String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
         WeeiaEvents events = new WeeiaEvents(calendarURL);
         List weeiaEvents = getEventsList(events.getDaysOfEvents(), events.getDescriptionsOfEvents());
+        if(weeiaEvents.isEmpty())
+            return new ResponseEntity<>("There is no events to generate", HttpStatus.NO_CONTENT);
 
         filename += ".ics";
         Calendar iCal = new Calendar();
@@ -55,33 +57,37 @@ public class CalendarEventsController {
         iCal.getProperties().add(Version.VERSION_2_0);
         iCal.getProperties().add(CalScale.GREGORIAN);
 
-//        iCal.getProperties().add(Method.PUBLISH)
-        java.util.Calendar calendar = java.util.Calendar.getInstance();
         int properMonth = Integer.parseInt(month);
-        System.out.println(month + " = > " + properMonth);
-        calendar.set(java.util.Calendar.YEAR, year);
-        calendar.set(java.util.Calendar.MONTH, (properMonth - 1));
-        calendar.set(java.util.Calendar.DAY_OF_MONTH, ((EventRest) weeiaEvents.get(0)).getDay());
-//        Initialize as an all-day event
-        VEvent event = new VEvent(new Date(calendar.getTime()), ((EventRest) weeiaEvents.get(0)).getDescription());
-//        Generate UID for the event
-        UidGenerator ug = new RandomUidGenerator();
-        event.getProperties().add(ug.generateUid());
-
-        iCal.getComponents().add(event);
-
-        // Generating a calendar File
-        try{
-            FileOutputStream out = new FileOutputStream(filename);
-            CalendarOutputter outputter = new CalendarOutputter();
-            outputter.output(iCal, out);
-        } catch (IOException ex) {
-            System.out.println("IOException message: " + ex.getMessage());
-            return new ResponseEntity<>("Not created: IOException" + ex.getMessage(), HttpStatus.BAD_REQUEST);
+        for (Object weeiaEvent : weeiaEvents) {
+            java.util.Calendar calendar = java.util.Calendar.getInstance();
+            calendar.set(java.util.Calendar.YEAR, year);
+            calendar.set(java.util.Calendar.MONTH, (properMonth - 1));
+            calendar.set(java.util.Calendar.DAY_OF_MONTH, ((EventRest) weeiaEvent).getDay());
+            //        Initialize as an all-day event
+            VEvent event = new VEvent(new Date(calendar.getTime()), ((EventRest) weeiaEvent).getDescription());
+            //        Generate UID for the event
+            UidGenerator ugen = new RandomUidGenerator();
+            event.getProperties().add(ugen.generateUid());
+            iCal.getComponents().add(event);
         }
+
+        if(!generateICSFile(iCal, filename))
+            return new ResponseEntity<>("Not created: IOException while generating file named: " + filename , HttpStatus.BAD_REQUEST);
 
         String response = "Events from year:\t" + year + ",\nmonth:\t" + month + "\ncreated in file " + filename;
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    private boolean generateICSFile(Calendar ical, String filename) {
+        try{
+            FileOutputStream out = new FileOutputStream(filename);
+            CalendarOutputter outputter = new CalendarOutputter();
+            outputter.output(ical, out);
+        } catch (IOException ex) {
+            System.out.println("IOException message: " + ex.getMessage());
+            return false;
+        }
+        return true;
     }
 
     @GetMapping(value = "/events")
