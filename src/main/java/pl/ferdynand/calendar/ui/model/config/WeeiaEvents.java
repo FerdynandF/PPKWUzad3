@@ -8,16 +8,17 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 
 public class WeeiaEvents {
+
     private String weeiaURL;
 
     public WeeiaEvents(String weeiaURL) {
         this.weeiaURL = weeiaURL;
     }
 
-    private Document getURLDocument(){
+    private Document getURLDocument() {
         try {
             return Jsoup.connect(this.weeiaURL).get();
-        } catch (HttpStatusException ex ) {
+        } catch (HttpStatusException ex) {
             System.out.println("HttpStatusException message: " + ex);
         } catch (IOException ex) {
             System.out.println("IOException message: " + ex);
@@ -29,10 +30,8 @@ public class WeeiaEvents {
         return getURLDocument().select("p");
     }
 
-    public Elements getDaysOfEvents(){
+    public Elements getDaysOfEvents() {
         return getURLDocument().select("a.active");
     }
-
-
 
 }

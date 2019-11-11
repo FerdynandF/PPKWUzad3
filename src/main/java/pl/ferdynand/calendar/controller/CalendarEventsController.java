@@ -31,7 +31,7 @@ public class CalendarEventsController {
 
     @GetMapping(value = "/events")
     public ResponseEntity<List> monthEvents(@RequestParam(name = "year", defaultValue = "2019") int year,
-                                            @RequestParam(name = "month", defaultValue = "12") String month) {
+            @RequestParam(name = "month", defaultValue = "12") String month) {
         String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
 
         WeeiaEvents weeiaEvents = new WeeiaEvents(calendarURL);
@@ -43,13 +43,13 @@ public class CalendarEventsController {
 
     @GetMapping(value = "/events/file.ics")
     public ResponseEntity<String> generateICS(@RequestParam(name = "year", defaultValue = "2019") int year,
-                                            @RequestParam(name = "month", defaultValue = "12") String month,
-                                            @RequestParam(name = "filename", defaultValue = "CalendarEvent") String filename) {
+            @RequestParam(name = "month", defaultValue = "12") String month,
+            @RequestParam(name = "filename", defaultValue = "CalendarEvent") String filename) {
         String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
 
         WeeiaEvents events = new WeeiaEvents(calendarURL);
         List weeiaEvents = getEventsList(events.getDaysOfEvents(), events.getDescriptionsOfEvents());
-        if(weeiaEvents.isEmpty())
+        if (weeiaEvents.isEmpty())
             return new ResponseEntity<>("There is no events to generate", HttpStatus.NO_CONTENT);
 
         filename += ".ics";
@@ -72,15 +72,15 @@ public class CalendarEventsController {
             iCal.getComponents().add(event);
         }
 
-        if(!generateICSFile(iCal, filename))
-            return new ResponseEntity<>("Not created: IOException while generating file named: " + filename , HttpStatus.BAD_REQUEST);
+        if (!generateICSFile(iCal, filename))
+            return new ResponseEntity<>("Not created: IOException while generating file named: " + filename, HttpStatus.BAD_REQUEST);
 
         String response = "Events from year:\t" + year + ",\nmonth:\t" + month + "\ncreated in file " + filename;
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     private boolean generateICSFile(Calendar ical, String filename) {
-        try{
+        try {
             FileOutputStream out = new FileOutputStream(filename);
             CalendarOutputter outputter = new CalendarOutputter();
             outputter.output(ical, out);
@@ -90,14 +90,14 @@ public class CalendarEventsController {
         return true;
     }
 
-    private List<EventRest> getEventsList (Elements days, Elements descriptions) {
+    private List<EventRest> getEventsList(Elements days, Elements descriptions) {
         int eventDaysCount = days.size();
         int[] eventWeekday = new int[eventDaysCount];
         String[] eventDescription = new String[eventDaysCount];
         List<EventRest> events = new ArrayList<>();
 
         for (int index = 0; index < eventWeekday.length; index++) {
-            try{
+            try {
                 eventWeekday[index] = Integer.parseInt(days.get(index).text());
             } catch (NumberFormatException ex) {
                 return Collections.emptyList();
