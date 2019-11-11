@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/test/calendar")
+@RequestMapping(value = "/api/calendar")
 public class TestCalendarController {
 
     @GetMapping
