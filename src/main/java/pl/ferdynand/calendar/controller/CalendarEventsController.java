@@ -33,11 +33,13 @@ public class CalendarEventsController {
     TODO Import ICS file to calendar on iPhone
      */
     @GetMapping(value = "/events/file.ics")
-    public ResponseEntity<String> generateICS(@RequestParam(name = "year", defaultValue = "2019") int year, @RequestParam(name = "month", defaultValue = "12") String month) {
-        if(year == 2019){
-            return new ResponseEntity<>(String.valueOf(year), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(String.valueOf(year), HttpStatus.ACCEPTED);
+    public ResponseEntity<String> generateICS(@RequestParam(name = "year", defaultValue = "2019") int year,
+                                            @RequestParam(name = "month", defaultValue = "12") String month,
+                                            @RequestParam(name = "filename", defaultValue = "CalendarEvent") String filename) {
+
+
+        String response = "Events from year:\t" + year + ",\nmonth:\t" + month + "\ncreated in file " + filename + ".ics";
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping(value = "/events")
