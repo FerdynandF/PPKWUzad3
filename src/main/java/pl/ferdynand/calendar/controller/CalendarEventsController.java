@@ -46,20 +46,30 @@ public class CalendarEventsController {
     public ResponseEntity<List> monthEvents(@RequestParam(name = "year", defaultValue = "2019") int year,@RequestParam(name = "month", defaultValue = "12") String month) {
 
         String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
-        Document document;
-        try {
-            document = Jsoup.connect(calendarURL).get();
-        } catch (HttpStatusException ex ) {
-            System.out.println("HttpStatusException message: " + ex);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } catch (IOException ex) {
-            System.out.println("IOException message: " + ex);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        Elements days = document.select("a.active");
-        Elements descriptions = document.select("p");
+
+        Elements days = getDaysOfEvents(calendarURL);
+        Elements descriptions = getDescriptionsOfEvents(calendarURL);
 
         return new ResponseEntity<>(getEventsList(days, descriptions), HttpStatus.OK);
+    }
+
+    private Document getURLDocument(String weeiaURL){
+        try {
+            return Jsoup.connect(weeiaURL).get();
+        } catch (HttpStatusException ex ) {
+            System.out.println("HttpStatusException message: " + ex);
+        } catch (IOException ex) {
+            System.out.println("IOException message: " + ex);
+        }
+        return new Document(weeiaURL);
+    }
+
+    private Elements getDescriptionsOfEvents(String weeiaURL) {
+        return getURLDocument(weeiaURL).select("p");
+    }
+
+    private Elements getDaysOfEvents(String weeiaURL){
+        return getURLDocument(weeiaURL).select("a.active");
     }
 
     private List getEventsList (Elements days, Elements descriptions) {
