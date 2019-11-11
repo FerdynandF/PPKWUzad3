@@ -8,7 +8,7 @@
  ## **WEEIA EVENTS**
 
 API generuje dla dowolnego miesiąca kalendarz w formacie ICS, korzystając z kalendarza który jest na stronie http://www.weeia.p.lodz.pl.
- API umożliwia również informacje o wydarzeniach w danym miesiącu.
+ API umożliwia również wyświetlenie informacji o wydarzeniach w danym miesiącu.
    
 <br /> 
 
@@ -40,7 +40,7 @@ Wyświetla wszystkie aktywne wydarzenia w danym roku i miesiącu
 
 | METODA | ŚCIEŻKA DOSTĘPU | PARAMETR | OPIS |
 |--------|:---------------:|:--------:|:----:|
-| GET| `api/weeia/calendar/events`| `year`  `month` | Zwraca tablice obiektów [EventRest][3] w formacie JSON, zawierające aktywne wydarzenia z danego miesiąca (Tablica moe być pusta)|
+| GET| `api/weeia/calendar/events`| `year`  `month` | Zwraca tablice obiektów [EventRest](#The EventRest Object) w formacie JSON, zawierające aktywne wydarzenia z danego miesiąca (Tablica moe być pusta)|
 -----
 
 ### **Przykłady wywołania**
