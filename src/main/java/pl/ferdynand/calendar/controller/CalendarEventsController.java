@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/calendar")
+@RequestMapping(value = "/api/weeia/calendar")
 public class CalendarEventsController {
 
     @GetMapping
