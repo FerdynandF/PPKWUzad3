@@ -30,10 +30,11 @@ import java.util.List;
 public class CalendarEventsController {
 
     @GetMapping(value = "/events")
-    public ResponseEntity<List> monthEvents(@RequestParam(name = "year", defaultValue = "2019") int year,
+    public ResponseEntity<Object> monthEvents(@RequestParam(name = "year", defaultValue = "2019") int year,
             @RequestParam(name = "month", defaultValue = "12") String month) {
         String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
-
+        if (!validateMonth(month))
+            return new ResponseEntity<>("Month must be in two digit format, from 01 to 12", HttpStatus.BAD_REQUEST);
         WeeiaEvents weeiaEvents = new WeeiaEvents(calendarURL);
         Elements days = weeiaEvents.getDaysOfEvents();
         Elements descriptions = weeiaEvents.getDescriptionsOfEvents();
@@ -46,7 +47,8 @@ public class CalendarEventsController {
             @RequestParam(name = "month", defaultValue = "12") String month,
             @RequestParam(name = "filename", defaultValue = "CalendarEvent") String filename) {
         String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
-
+        if (!validateMonth(month))
+            return new ResponseEntity<>("Month must be in two digit format, from 01 to 12", HttpStatus.BAD_REQUEST);
         WeeiaEvents events = new WeeiaEvents(calendarURL);
         List weeiaEvents = getEventsList(events.getDaysOfEvents(), events.getDescriptionsOfEvents());
         if (weeiaEvents.isEmpty())
@@ -108,6 +110,19 @@ public class CalendarEventsController {
         }
 
         return events;
+    }
+
+    private boolean validateMonth(String month) {
+        try {
+            int monthInt = Integer.parseInt(month);
+            if (monthInt > 12 || monthInt < 1)
+                return false;
+            if(monthInt < 10 && month.length()<2)
+                return false;
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+        return true;
     }
 
 }
