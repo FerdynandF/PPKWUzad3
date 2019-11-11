@@ -22,9 +22,17 @@ public class TestCalendarController {
 
     @GetMapping
     public ResponseEntity<String> getURI( @RequestParam(name = "year", defaultValue = "2019") int year,
-                                            @RequestParam(name = "month", defaultValue = "11") int month){
+                                            @RequestParam(name = "month", defaultValue = "12") String month){
         String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
         return new ResponseEntity<>(calendarURL, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/events/file.ics")
+    public ResponseEntity<String> generateICS(@RequestParam(name = "year", defaultValue = "2019") int year, @RequestParam(name = "month", defaultValue = "12") String month) {
+        if(year == 2019){
+            return new ResponseEntity<>(String.valueOf(year), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(String.valueOf(year), HttpStatus.ACCEPTED);
     }
 
     @GetMapping(value = "/events")
