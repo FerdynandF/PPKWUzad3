@@ -13,7 +13,7 @@ API generuje dla dowolnego miesiąca kalendarz w formacie ICS, korzystając z ka
 <br /> 
 
 ### ENDPOINTS
-* [GET    /api/weeia/calendar/events][1]
+* [GET    /api/weeia/calendar/events](#list-events)
 * [GET    /api/weeia/calendar/events/plik.ics][2]
 
 <br />
@@ -32,15 +32,15 @@ _________
 <br />
 <br />
 
- [1]: [ListEvents]
-**LIST EVENTS**  
+
+#### **LIST EVENTS**  
 Wyświetla wszystkie aktywne wydarzenia w danym roku i miesiącu
 
 
 
 | METODA | ŚCIEŻKA DOSTĘPU | PARAMETR | OPIS |
 |--------|:---------------:|:--------:|:----:|
-| GET| `api/weeia/calendar/events`| `year`  `month` | Zwraca tablice obiektów [EventRest](#The EventRest Object) w formacie JSON, zawierające aktywne wydarzenia z danego miesiąca (Tablica moe być pusta)|
+| GET| `api/weeia/calendar/events`| `year`  `month` | Zwraca tablice obiektów [EventRest](#the-eventrest-object) w formacie JSON, zawierające aktywne wydarzenia z danego miesiąca (Tablica moe być pusta)|
 -----
 
 ### **Przykłady wywołania**
