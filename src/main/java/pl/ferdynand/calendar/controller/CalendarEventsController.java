@@ -22,17 +22,31 @@ import pl.ferdynand.calendar.ui.model.response.EventRest;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/weeia/calendar")
 public class CalendarEventsController {
-    
+
+    @GetMapping(value = "/events")
+    public ResponseEntity<List> monthEvents(@RequestParam(name = "year", defaultValue = "2019") int year,
+                                            @RequestParam(name = "month", defaultValue = "12") String month) {
+        String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
+
+        WeeiaEvents weeiaEvents = new WeeiaEvents(calendarURL);
+        Elements days = weeiaEvents.getDaysOfEvents();
+        Elements descriptions = weeiaEvents.getDescriptionsOfEvents();
+
+        return new ResponseEntity<>(getEventsList(days, descriptions), HttpStatus.OK);
+    }
+
     @GetMapping(value = "/events/file.ics")
     public ResponseEntity<String> generateICS(@RequestParam(name = "year", defaultValue = "2019") int year,
                                             @RequestParam(name = "month", defaultValue = "12") String month,
                                             @RequestParam(name = "filename", defaultValue = "CalendarEvent") String filename) {
         String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
+
         WeeiaEvents events = new WeeiaEvents(calendarURL);
         List weeiaEvents = getEventsList(events.getDaysOfEvents(), events.getDescriptionsOfEvents());
         if(weeiaEvents.isEmpty())
@@ -53,8 +67,8 @@ public class CalendarEventsController {
             //        Initialize as an all-day event
             VEvent event = new VEvent(new Date(calendar.getTime()), ((EventRest) weeiaEvent).getDescription());
             //        Generate UID for the event
-            UidGenerator ugen = new RandomUidGenerator();
-            event.getProperties().add(ugen.generateUid());
+            UidGenerator uGen = new RandomUidGenerator();
+            event.getProperties().add(uGen.generateUid());
             iCal.getComponents().add(event);
         }
 
@@ -71,21 +85,9 @@ public class CalendarEventsController {
             CalendarOutputter outputter = new CalendarOutputter();
             outputter.output(ical, out);
         } catch (IOException ex) {
-            System.out.println("IOException message: " + ex.getMessage());
             return false;
         }
         return true;
-    }
-
-    @GetMapping(value = "/events")
-    public ResponseEntity<List> monthEvents(@RequestParam(name = "year", defaultValue = "2019") int year,@RequestParam(name = "month", defaultValue = "12") String month) {
-        String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
-
-        WeeiaEvents weeiaEvents = new WeeiaEvents(calendarURL);
-        Elements days = weeiaEvents.getDaysOfEvents();
-        Elements descriptions = weeiaEvents.getDescriptionsOfEvents();
-
-        return new ResponseEntity<>(getEventsList(days, descriptions), HttpStatus.OK);
     }
 
     private List<EventRest> getEventsList (Elements days, Elements descriptions) {
@@ -98,12 +100,13 @@ public class CalendarEventsController {
             try{
                 eventWeekday[index] = Integer.parseInt(days.get(index).text());
             } catch (NumberFormatException ex) {
-                System.out.println("Number Format Exception message: " + ex.getMessage());
+                return Collections.emptyList();
             }
             eventDescription[index] = descriptions.get(index).text();
             EventRest event = new EventRest(eventWeekday[index], eventDescription[index]);
             events.add(event);
         }
+
         return events;
     }
 
