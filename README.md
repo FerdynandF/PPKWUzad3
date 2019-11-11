@@ -120,7 +120,8 @@ Response:
 <details>
     <summary>Zawartość pliku DecemberEvents.ics</summary>
     <p>
-```json
+     
+    ``` 
     BEGIN:VCALENDAR
     PRODID:-//Apple Inc.//Mac OS X 10.15.1//EN
     VERSION:2.0
@@ -168,7 +169,5 @@ Response:
     UID:52035910-b9cc-4ee5-a63c-f72b0b8680a1
     END:VEVENT
     END:VCALENDAR
-
-```  
-
+    ```  
 </p></details>
