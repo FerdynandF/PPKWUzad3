@@ -45,7 +45,7 @@ Wyświetla wszystkie aktywne wydarzenia w danym roku i miesiącu
 ###### **UWAGA!** Jeżeli chcemy podać jako parametr `month` miesiąć, który jest przed Październikiem (Styczeń, Luty, Marzec... Wrzesień) to trzeba podać dwucyfrową reprezentację miesiąca np.: Styczń to 01, Maj to 05 itd. 
 Zwraca status:
 * 200 - OK <br />Jeżeli się wszytko powiodło.
-* 400 - BAD_REQUEST <br />Jeżeli parametr `month` został niepoprawnie wpisany
+* 400 - BAD_REQUEST <br />Jeżeli parametr `month` został niepoprawnie wpisany.
   
 
 #### **Przykłady wywołania**
@@ -76,7 +76,7 @@ Response:
 ] 
 ```   
 
-* ##### Drugi przykład.<br />W tej sytuacji zwrócona zostanie pusta tablica, poniewaz dla miesiąca Maj w roku 2020 w dniu pisania dokumentacji (11.11.2019) nie ma aktywnych wydarzeń
+* ##### Drugi przykład.<br />W tej sytuacji zwrócona zostanie pusta tablica, ponieważ dla miesiąca Maj w roku 2020 w dniu pisania dokumentacji (11.11.2019) nie było aktywnych wydarzeń.
 
 Request: 
 ```java
@@ -106,7 +106,7 @@ Zwraca status:
   
 
 #### **Przykłady wywołania**
-* ##### Pierwszy przykład dla zapytania o aktywne wydarzenia w Grudniu 2019 roku.
+* ##### Pierwszy przykład zapytania o aktywne wydarzenia w Grudniu 2019 roku.
 Request: 
 ```java
       GET | localhost:8080/api/weeia/calendar/events/file.ics?year=2019&month=12&filename=DecemberEvents 
