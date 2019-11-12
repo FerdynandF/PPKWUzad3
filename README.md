@@ -32,7 +32,7 @@ _________
 <br />
 
 
-#### **LIST EVENTS**
+### **LIST EVENTS**
 Wyświetla wszystkie aktywne wydarzenia w danym roku i miesiącu
 
 
@@ -90,7 +90,7 @@ Response:
   
   <br />
   
-#### **GENERATE ICS FILE**
+### **GENERATE ICS FILE**
 Generuje plik z rozszerzeniem .ics w którym znajdują się wydarzenia w danym roku i miesiącu.  
  
 | METODA | ŚCIEŻKA DOSTĘPU | PARAMETR | OPIS |
