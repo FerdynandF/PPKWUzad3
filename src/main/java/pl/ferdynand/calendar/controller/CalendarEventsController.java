@@ -9,6 +9,7 @@ import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.RandomUidGenerator;
 import net.fortuna.ical4j.util.UidGenerator;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.jsoup.select.Elements;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.ferdynand.calendar.ui.model.config.WeeiaEvents;
 import pl.ferdynand.calendar.ui.model.response.EventRest;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,12 +44,14 @@ public class CalendarEventsController {
     }
 
     @GetMapping(value = "/events/file.ics")
-    public ResponseEntity<String> generateICS(@RequestParam(name = "year", defaultValue = "2019") int year,
+    public ResponseEntity<Object> generateICS(@RequestParam(name = "year", defaultValue = "2019") int year,
             @RequestParam(name = "month", defaultValue = "12") String month,
-            @RequestParam(name = "filename", defaultValue = "CalendarEvent") String filename) {
+            @RequestParam(name = "filename", defaultValue = "CalendarEvent") String filename,
+            HttpServletResponse response) {
         String calendarURL = "http://www.weeia.p.lodz.pl/pliki_strony_kontroler/kalendarz.php?rok=" + year + "&miesiac=" + month;
         if (!validateMonth(month))
             return new ResponseEntity<>("Month must be in two digit format, from 01 to 12", HttpStatus.BAD_REQUEST);
+        boolean flag = true;
         WeeiaEvents events = new WeeiaEvents(calendarURL);
         List weeiaEvents = getEventsList(events.getDaysOfEvents(), events.getDescriptionsOfEvents());
         if (weeiaEvents.isEmpty())
@@ -74,16 +77,28 @@ public class CalendarEventsController {
             iCal.getComponents().add(event);
         }
 
-        if (!generateICSFile(iCal, filename))
-            return new ResponseEntity<>("Not created: IOException while generating file named: " + filename, HttpStatus.BAD_REQUEST);
+        try {
+            FileOutputStream out = new FileOutputStream(filename);
+            CalendarOutputter outputter = new CalendarOutputter();
+            outputter.output(iCal, out);
 
-        String response = "Events from year:\t" + year + ",\nmonth:\t" + month + "\ncreated in file " + filename;
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+            // get your file as InputStream
+            InputStream is = new FileInputStream(new File(filename));
+            // copy it to response's OutputStream
+            response.setContentType("application/ics");
+            response.addHeader("Content-Disposition", "attachment; filename="+filename);
+            IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+            return new ResponseEntity<>(is, HttpStatus.CREATED);
+        } catch (IOException ex) {
+            return new ResponseEntity<>("Not created: IOException while generating file named: " + filename, HttpStatus.BAD_REQUEST);
+        }
     }
 
     private boolean generateICSFile(Calendar ical, String filename) {
         try {
             FileOutputStream out = new FileOutputStream(filename);
+//            Resource
             CalendarOutputter outputter = new CalendarOutputter();
             outputter.output(ical, out);
         } catch (IOException ex) {
