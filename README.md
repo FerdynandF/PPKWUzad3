@@ -39,7 +39,7 @@ Wyświetla wszystkie aktywne wydarzenia w danym roku i miesiącu
 
 | METODA | ŚCIEŻKA DOSTĘPU | PARAMETR | OPIS |
 |--------|:---------------:|:--------:|:----:|
-| GET| `api/weeia/calendar/events`| `year`  `month` | Zwraca tablice obiektów [EventRest](#obiekt-eventrest) w formacie JSON, zawierające aktywne wydarzenia z danego miesiąca (Tablica moe być pusta)|
+| GET| `api/weeia/calendar/events`| `year`  `month` | Zwraca tablice obiektów [EventRest](#obiekt-eventrest) w formacie JSON, zawierające aktywne wydarzenia z danego miesiąca (Tablica może być pusta)|
 -----
 ###### Domyślne wartości parametrów: year = 2019, month = 12
 ###### **UWAGA!** Jeżeli chcemy podać jako parametr `month` miesiąć, który jest przed Październikiem (Styczeń, Luty, Marzec... Wrzesień) to trzeba podać dwucyfrową reprezentację miesiąca np.: Styczń to 01, Maj to 05 itd. 
