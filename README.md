@@ -14,7 +14,7 @@ API generuje dla dowolnego miesiąca kalendarz w formacie ICS, korzystając z ka
 
 ### ENDPOINTS
 * [GET    /api/weeia/calendar/events](#list-events)
-* [GET    /api/weeia/calendar/events/plik.ics](#generate-ics-file)
+* [GET    /api/weeia/calendar/events/plik/download](#generate-ics-file)
 
 <br />
 
@@ -95,7 +95,7 @@ Generuje plik z rozszerzeniem .ics w którym znajdują się wydarzenia w danym r
  
 | METODA | ŚCIEŻKA DOSTĘPU | PARAMETR | OPIS |
 |--------|:---------------:|:--------:|:----:|
-| GET| `api/weeia/calendar/events/file.ics`| `year`  `month`  `filename` | Zwraca informacje czy generowanie pliku się powiodło. Jeżeli operacja się powiodła to zostaje utworzony plik `filename`.ics z aktywnymi wydarzeniami w danym miesiąci i roku.|
+| GET| `api/weeia/calendar/events/file/download`| `year`  `month`  `filename` | Pobiera wygenerowany plik. Jeżeli operacja się powiodła to zostaje pobrany plik `filename`.ics z aktywnymi wydarzeniami w danym miesiąci i roku.|
 -----
 ###### Domyślne wartości parametrów:<br />year = 2019, month = 12, filename = CalendarEvent
 ###### **UWAGA!** Jeżeli chcemy podać jako parametr `month` miesiąć, który jest przed Październikiem (Styczeń, Luty, Marzec... Wrzesień) to trzeba podać dwucyfrową reprezentację miesiąca np.: Styczń to 01, Maj to 05 itd. 
@@ -109,14 +109,10 @@ Zwraca status:
 * ##### Pierwszy przykład zapytania o aktywne wydarzenia w Grudniu 2019 roku.
 Request: 
 ```java
-      GET | localhost:8080/api/weeia/calendar/events/file.ics?year=2019&month=12&filename=DecemberEvents 
+      GET | localhost:8080/api/weeia/calendar/events/file/download?year=2019&month=12&filename=DecemberEvents 
 ```
 Response:
-```json
-    Events from year:	2019,
-    month:	12
-    created in file DecemberEvents.ics
-```   
+
 <details>
     <summary>Zawartość pliku DecemberEvents.ics</summary>
     <p>
@@ -175,14 +171,10 @@ Response:
 * ##### Drugi przyklad zapytania o aktywne wydarzenia w Kwietniu 2020 roku. W pliku zostało zawarte tylko jedno wydarzenie, ponieważ tyle było aktywnych wydarzeń w tym miesiącu.
 Request: 
 ```java
-      GET | localhost:8080/api/weeia/calendar/events/file.ics?year=2020&month=04&filename=AprilEvents 
+      GET | localhost:8080/api/weeia/calendar/events/file/download?year=2020&month=04&filename=AprilEvents 
 ```
 Response:
-```json
-    Events from year:	2020,
-    month:	04
-    created in file AprilEvents.ics
-```   
+ 
 <details>
     <summary>Zawartość pliku AprilEvents.ics</summary>
     <p>
