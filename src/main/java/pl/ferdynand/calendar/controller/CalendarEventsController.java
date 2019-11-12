@@ -43,7 +43,7 @@ public class CalendarEventsController {
         return new ResponseEntity<>(getEventsList(days, descriptions), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/events/file.ics")
+    @GetMapping(value = "/events/file/download")
     public ResponseEntity<Object> generateICS(@RequestParam(name = "year", defaultValue = "2019") int year,
             @RequestParam(name = "month", defaultValue = "12") String month,
             @RequestParam(name = "filename", defaultValue = "CalendarEvent") String filename,
