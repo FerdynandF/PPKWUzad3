@@ -15,11 +15,12 @@ public class CalendarScheduleController {
     @GetMapping(value = "/test")
     public ResponseEntity<String> h3Headers() {
         String plodzURL = "https://www.p.lodz.pl/pl/rozklad-roku-akademickiego-20192010";
-// bez uwagi
+// bez uwag
         PLodzSchedule pLodzSchedule = new PLodzSchedule(plodzURL);
 
         Elements h3Headers = pLodzSchedule.getH3Headers();
+        Elements winterSemesterPeriod = pLodzSchedule.getWinterSemesterPeriod();
 
-        return new ResponseEntity<>(h3Headers.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(String.valueOf(winterSemesterPeriod), HttpStatus.OK);
     }
 }

@@ -17,4 +17,8 @@ public class PLodzSchedule {
     public Elements getH3Headers() {
         return getURLDocument().select("h3.naglowek_h3");
     }
+
+    public Elements getWinterSemesterPeriod() {
+        return getURLDocument().select("h3.naglowek_h3").nextAll();
+    }
 }

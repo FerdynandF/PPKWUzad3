@@ -98,7 +98,7 @@ public class CalendarEventsController {
     private boolean generateICSFile(Calendar ical, String filename) {
         try {
             FileOutputStream out = new FileOutputStream(filename);
-//            Resourcex 
+//            Resourcex
             CalendarOutputter outputter = new CalendarOutputter();
             outputter.output(ical, out);
         } catch (IOException ex) {
