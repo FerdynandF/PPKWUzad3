@@ -27,6 +27,17 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         );
     }
 
+    @ExceptionHandler(value = DateFormatException.class)
+    public ResponseEntity<Object> handlerDateFormatException(DateFormatException exN, WebRequest request) {
+        String errorMessageDescription = exN.getLocalizedMessage();
+        if(errorMessageDescription == null)
+            errorMessageDescription = exN.toString();
+
+        ErrorMessage handler = new ErrorMessage(new Date(), errorMessageDescription);
+
+        return new ResponseEntity<>(handler, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(value = {NullPointerException.class})
     public ResponseEntity<Object> handleNullPointerException (NullPointerException exN, WebRequest request) {
         String errorMessageDescription = exN.getLocalizedMessage();
