@@ -7,11 +7,13 @@ public class Date {
     private int month;
     private int day;
 
-    public Date(String dayMonthYear){
-        String[] numbers = dayMonthYear.split(".");
+    public Date(String dayMonthYear) throws DateFormatException{
+        String[] numbers = dayMonthYear.split("[.]");
         if(numbers.length != 3)
             throw new DateFormatException("Wrong date format, should be day.month.year");
         this.day =  Integer.parseInt(numbers[0]);
+        this.month = Integer.parseInt(numbers[1]);
+        this.year = Integer.parseInt(numbers[2]);
     }
 
     public Date(int year, int month, int day) {
@@ -45,5 +47,10 @@ public class Date {
     public Date setDay(int day) {
         this.day = day;
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return this.day + "." + this.month + "." + this.year;
     }
 }

@@ -40,4 +40,9 @@ public class Event {
         this.ends = ends;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Title: " + title + "\nStarts: " + starts + "\nEnds: " + ends;
+    }
 }

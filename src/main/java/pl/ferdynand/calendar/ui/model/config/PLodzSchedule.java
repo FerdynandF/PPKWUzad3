@@ -1,6 +1,7 @@
 package pl.ferdynand.calendar.ui.model.config;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class PLodzSchedule {
@@ -18,7 +19,7 @@ public class PLodzSchedule {
         return getURLDocument().select("h3.naglowek_h3");
     }
 
-    public Elements getWinterSemesterPeriod() {
-        return getURLDocument().select("h3.naglowek_h3").nextAll();
+    public Element getWinterSemesterPeriod() {
+        return getURLDocument().select("h3.naglowek_h3").nextAll("p").first();
     }
 }
